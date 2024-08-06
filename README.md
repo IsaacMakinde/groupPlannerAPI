@@ -4,6 +4,8 @@ This template provides a minimal setup to get my flask api working and to descri
 
 ## Description
 
+this api is meant to keep track of even
+
 ## Technologies
 
 ## Challenges
