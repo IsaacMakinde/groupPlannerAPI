@@ -2,18 +2,15 @@ import requests
 
 ENDPOINT = "http://127.0.0.1:5000/api"
 
-
 ## delete all events
 
 def test_can_call_endpoint():
     response = requests.get(f"{ENDPOINT}/events")
     assert response.status_code == 200
 
-
 def test_clean_db():
     response = requests.delete(f"{ENDPOINT}/events")
     assert response.status_code == 200
-
 
 def test_can_get_empty_list():
     response = requests.get(f"{ENDPOINT}/events")
@@ -46,7 +43,6 @@ def test_can_create_event():
     assert get_event_data['title'] == payload['title']
     assert get_event_data['date'] == payload['date']
 
-
 def test_given_valid_data_can_update_event():
     # create a new event
     event_id, original_payload = create_update_test_event_valid()
@@ -77,9 +73,6 @@ def test_given_valid_data_can_update_event():
     assert updated_data['guests'] == original_payload['guests']
     assert updated_data['id'] == event_id
 
-
-
-
 def test_update_with_invalid_data():
     """Test updating an event with invalid data should fail."""
     event_id, _  = create_update_test_event_invalid()
@@ -89,11 +82,11 @@ def test_update_with_invalid_data():
     }
     update_event_response = update_event(invalid_payload, event_id)
     assert update_event_response.status_code == 400
+    print(update_event_response.json())
 
     # check the original data
     
 ## helper functions
-
 def create_event(payload):
     return requests.post(f"{ENDPOINT}/events", json=payload)
 
@@ -134,7 +127,6 @@ def create_update_test_event_valid():
     return response.json()["id"], payload
 
 
-
 def create_update_test_event_invalid():
     """Helper function to create a test event"""
     payload = {
@@ -151,9 +143,9 @@ def create_update_test_event_invalid():
     assert response.status_code == 201
     return response.json()["id"], payload
 
-
-   
-    
-
 def delete_events():
+
+
+
+
     return requests.delete(f"{ENDPOINT}/events")
