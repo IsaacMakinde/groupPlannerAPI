@@ -1,7 +1,10 @@
 import requests
+import os
+from dotenv import load_dotenv
 
-ENDPOINT = "http://127.0.0.1:5000/api"
+load_dotenv()
 
+ENDPOINT = os.getenv("API_TEST_ENDPOINT")
 ## delete all events
 
 def test_can_call_endpoint():
@@ -144,8 +147,5 @@ def create_update_test_event_invalid():
     return response.json()["id"], payload
 
 def delete_events():
-
-
-
-
     return requests.delete(f"{ENDPOINT}/events")
+
