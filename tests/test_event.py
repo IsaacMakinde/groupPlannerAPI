@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-ENDPOINT = os.getenv("API_TEST_ENDPOINT")
+ENDPOINT = "https://my-planner-api-51759a684968.herokuapp.com/api"
 ## delete all events
 
 def test_can_call_endpoint():
