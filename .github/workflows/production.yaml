@@ -3,7 +3,8 @@ name: API tests
 on:
   pull_request:
     types: [closed]
-    branches: main
+    branches:
+      - main
   workflow_dispatch:
 
 jobs:
@@ -13,13 +14,12 @@ jobs:
       matrix:
         os: [ubuntu-latest]
         python-version:
-          - "3.7"
           - "3.8"
           - "3.9"
           - "3.10"
           - "3.11"
 
-    name: API tests
+    name: API tests on python ${{ matrix.python-version }}
     runs-on: ${{ matrix.os }}
 
     steps:
