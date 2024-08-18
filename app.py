@@ -181,6 +181,7 @@ def singleEvent(id):
             sql = '''SELECT * FROM events WHERE id = %s'''
             cursor.execute(sql, (id,))
             updated_event = cursor.fetchone()
+            updated_event['pricing'] = float(updated_event['pricing'])
             return jsonify(updated_event), 200
         except pymysql.Error as e:
             print(e)

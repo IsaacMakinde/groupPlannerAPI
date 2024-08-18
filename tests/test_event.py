@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-ENDPOINT = "https://my-planner-api-51759a684968.herokuapp.com/api"
+ENDPOINT = "http://127.0.0.1:5000/api"
 ## delete all events
 
 def test_can_call_endpoint():
@@ -29,7 +29,7 @@ def test_can_create_event():
   "guests":"Test guest",
   "host": "Test host ",
   "pricing": 10.0,
-  "title": "Test Titlewhy", ##  have to constantly change this
+  "title": "Test Title001", ##  have to constantly change this
   "venue": "Test Venue"
 }
     create_event_response = create_event(payload)
