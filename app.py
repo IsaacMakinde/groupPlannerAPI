@@ -100,7 +100,7 @@ def getAllEvents():
         cursor.execute('SELECT * FROM events')
         events = [
             dict(id=int(row['id']), 
-                  title=row['host'],
+                  title=row['title'],
                   host=row['host'], 
                   date=row['date'], 
                   venue=row['venue'], 

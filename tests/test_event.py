@@ -29,7 +29,7 @@ def test_can_create_event():
   "guests":"Test guest",
   "host": "Test host ",
   "pricing": 10.0,
-  "title": "Test Title001", ##  have to constantly change this
+  "title": "Test Titlewhy", ##  have to constantly change this
   "venue": "Test Venue"
 }
     create_event_response = create_event(payload)
