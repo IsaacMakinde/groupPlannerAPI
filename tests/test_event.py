@@ -1,11 +1,17 @@
 import requests
-import os
 from dotenv import load_dotenv
+import os
+import uuid
+
 
 load_dotenv()
 
-ENDPOINT = "http://127.0.0.1:5000/api"
+ENDPOINT = os.getenv("API_TEST_ENDPOINT")
 ## delete all events
+print(f"ENDPOINT: {ENDPOINT}")
+print("Loaded API_TEST_ENDPOINT:", os.getenv("API_TEST_ENDPOINT"))
+print("System-level API_TEST_ENDPOINT:", os.environ.get("API_TEST_ENDPOINT"))
+
 
 def test_can_call_endpoint():
     response = requests.get(f"{ENDPOINT}/events")
@@ -21,6 +27,7 @@ def test_can_get_empty_list():
     assert len(data) == 0 and response.status_code == 200
 
 def test_can_create_event():
+    unique_title = f"Test Title-{uuid.uuid4()}"
     
     payload = {
   "category": "Celebration",
@@ -29,7 +36,7 @@ def test_can_create_event():
   "guests":"Test guest",
   "host": "Test host ",
   "pricing": 10.0,
-  "title": "Test Title001", ##  have to constantly change this
+  "title": unique_title, ##  have to constantly change this
   "venue": "Test Venue"
 }
     create_event_response = create_event(payload)
@@ -101,6 +108,7 @@ def update_event(payload, event_id):
 
 
 def new_event_payload():
+    unique_title = f"Test Title-{uuid.uuid4()}"
     return {
   "category": "Celebration",
   "date": "2024-12-12",
@@ -108,13 +116,14 @@ def new_event_payload():
   "guests":"Test guest",
   "host": "Test host ",
   "pricing": 10.0,
-  "title": "Test Title001",
+  "title": unique_title,
   "venue": "Test Venue"
 }
 
 
 def create_update_test_event_valid():
     """Helper function to create a test event"""
+    unique_title = f"Test Title-{uuid.uuid4()}"
     payload = {
         "category": "Travel",
         "date": "2024-12-25",
@@ -122,7 +131,7 @@ def create_update_test_event_valid():
         "guests":"Test guest",
         "host": "Test host ",
         "pricing": 10.0,
-        "title": "Test Title002",
+        "title": unique_title,
         "venue": "Test Venue"
     }
     response = create_event(payload)
@@ -132,6 +141,7 @@ def create_update_test_event_valid():
 
 def create_update_test_event_invalid():
     """Helper function to create a test event"""
+    unique_title = f"Test Title-{uuid.uuid4()}"
     payload = {
         "category": "Travel",
         "date": "2024-12-25",
@@ -139,7 +149,7 @@ def create_update_test_event_invalid():
         "guests":"Test guest",
         "host": "Test host ",
         "pricing": 10.0,
-        "title": "Test Title003",
+        "title": unique_title,
         "venue": "Test Venue"
     }
     response = create_event(payload)

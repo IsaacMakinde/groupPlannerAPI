@@ -8,7 +8,7 @@ from datetime import datetime
 app = Flask(__name__)
 CORS(app)
 load_dotenv()
-ACCEPTEDFIELDS = ['title', 'host', 'date', 'venue', 'description', 'category', 'pricing', 'guests']
+ACCEPTEDFIELDS = ['title', 'host', 'date', 'venue', 'place_id', 'description', 'category', 'pricing', 'guests']
 
 
 def db_connection():
@@ -19,6 +19,7 @@ def db_connection():
     database= os.getenv('MYSQL_DATABASE'),
     user= os.getenv('MYSQL_USER'),
     password= os.getenv('MYSQL_PASSWORD'),
+    port = int(os.getenv('MYSQL_PORT')),
     charset='utf8mb4',
     cursorclass=pymysql.cursors.DictCursor
 
@@ -53,6 +54,7 @@ def getAllEvents():
         new_host = request.json['host']
         new_date = request.json['date']
         new_venue = request.json['venue']
+        new_place_id = request.json['place_id']
         new_description = request.json['description']
         new_category = request.json['category']
         new_pricing = request.json['pricing']
@@ -74,8 +76,8 @@ def getAllEvents():
 
         try:
             print(request.json)
-            sql = '''INSERT INTO events (title, host, date, venue, description, category, pricing, guests) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)'''
-            cursor.execute(sql, (new_title, new_host, new_date, new_venue, new_description, new_category, new_pricing, new_guests))
+            sql = '''INSERT INTO events (title, host, date, venue, place_id, description, category, pricing, guests) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)'''
+            cursor.execute(sql, (new_title, new_host, new_date, new_venue, new_place_id, new_description, new_category, new_pricing, new_guests))
             conn.commit() 
             new_event = {
                 'id': cursor.lastrowid,
@@ -83,6 +85,7 @@ def getAllEvents():
                 'host': new_host,
                 'date': new_date,
                 'venue': new_venue,
+                'place_id': new_place_id,
                 'description': new_description,
                 'category': new_category,
                 'pricing': new_pricing,
@@ -104,6 +107,7 @@ def getAllEvents():
                   host=row['host'], 
                   date=row['date'], 
                   venue=row['venue'], 
+                  place_id=row['place_id'],
                   description=row['description'], 
                   category=row['category'], 
                   pricing=float(row['pricing']), 
@@ -117,7 +121,7 @@ def getAllEvents():
         cursor.execute('DELETE FROM events')
         conn.commit()
         return jsonify({'message': 'All events have been deleted'}), 200
-    
+
 
 @app.route('/api/events/<string:id>', methods=['GET', 'PUT', 'DELETE'])
 def singleEvent(id):
@@ -134,6 +138,7 @@ def singleEvent(id):
                             'host': event['host'],
                             'date': event['date'],
                             'venue': event['venue'],
+                            'place_id': event['place_id'],
                             'description': event['description'],
                             'category': event['category'], 
                             'pricing': float(event['pricing']), 
@@ -153,7 +158,8 @@ def singleEvent(id):
             else :
                 for field in fields:
                     if field not in ACCEPTEDFIELDS:
-                        return jsonify({'message': f'{field} is not a valid field'}), 400
+                        
+                        return jsonify({'message': f'{field, ACCEPTEDFIELDS} is not a valid field'}), 400
             
             for field in fields:
                 if field == 'date':
@@ -187,8 +193,7 @@ def singleEvent(id):
             print(e)
             return jsonify({'message': 'Something went wrong'}), 500
 
-          
-    
+
     elif request.method == 'DELETE':
         ## delete data from a database
         conn = db_connection()

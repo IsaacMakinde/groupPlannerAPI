@@ -9,6 +9,7 @@ conn = pymysql.connect(
     database=os.getenv('MYSQL_DATABASE'),
     user=os.getenv('MYSQL_USER'),
     password=os.getenv('MYSQL_PASSWORD'),
+    port=int(os.getenv('MYSQL_PORT')),
     charset='utf8mb4',
     cursorclass=pymysql.cursors.DictCursor
 )
@@ -20,7 +21,8 @@ CREATE TABLE IF NOT EXISTS events (
     title VARCHAR(255) UNIQUE NOT NULL,
     host VARCHAR(255) NOT NULL,
     date VARCHAR(100) NOT NULL,
-    venue VARCHAR(255) NOT NULL,
+    venue VARCHAR(400) NOT NULL,
+    place_id VARCHAR(255) NOT NULL,
     description TEXT,
     category VARCHAR(255),
     pricing DECIMAL(10, 2) NOT NULL,
