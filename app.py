@@ -8,7 +8,7 @@ from datetime import datetime
 app = Flask(__name__)
 CORS(app)
 load_dotenv()
-ACCEPTEDFIELDS = ['title', 'host', 'date', 'venue', 'place_id', 'description', 'category', 'pricing', 'guests']
+ACCEPTEDFIELDS = ['title', 'clerk_id', 'host', 'date', 'venue', 'place_id', 'description', 'category', 'pricing', 'guests']
 
 
 def db_connection():
@@ -52,6 +52,7 @@ def getAllEvents():
     if request.method == 'POST': 
         new_title = request.json['title']
         new_host = request.json['host']
+        new_clerk_id = request.json['clerk_id']
         new_date = request.json['date']
         new_venue = request.json['venue']
         new_place_id = request.json['place_id']
@@ -60,9 +61,10 @@ def getAllEvents():
         new_pricing = request.json['pricing']
         new_guests = request.json['guests']
         
+        
         ## add data to a database
 
-        if not all([new_title, new_host, new_date, new_venue, new_description, new_category, new_pricing, new_guests]):
+        if not all([new_title, new_host, new_clerk_id, new_date, new_venue, new_description, new_category, new_pricing, new_guests]):
             return jsonify({'message': 'Missing data',
                             "data" : request.json}), 400
         
@@ -76,13 +78,14 @@ def getAllEvents():
 
         try:
             print(request.json)
-            sql = '''INSERT INTO events (title, host, date, venue, place_id, description, category, pricing, guests) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)'''
-            cursor.execute(sql, (new_title, new_host, new_date, new_venue, new_place_id, new_description, new_category, new_pricing, new_guests))
+            sql = '''INSERT INTO events (title, host, clerk_id, date, venue, place_id, description, category, pricing, guests) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'''
+            cursor.execute(sql, (new_title, new_host, new_clerk_id, new_date, new_venue, new_place_id, new_description, new_category, new_pricing, new_guests))
             conn.commit() 
             new_event = {
                 'id': cursor.lastrowid,
                 'title': new_title,
                 'host': new_host,
+                'clerk_id': new_clerk_id,
                 'date': new_date,
                 'venue': new_venue,
                 'place_id': new_place_id,
@@ -91,6 +94,7 @@ def getAllEvents():
                 'pricing': new_pricing,
                 'guests': new_guests
             }
+            print(new_event, "new event")
             return jsonify(new_event), 201
         except pymysql.IntegrityError as e:
             if 'UNIQUE constraint failed' in str(e):
@@ -104,7 +108,8 @@ def getAllEvents():
         events = [
             dict(id=int(row['id']), 
                   title=row['title'],
-                  host=row['host'], 
+                  host=row['host'],
+                  clerk_id=row['clerk_id'], 
                   date=row['date'], 
                   venue=row['venue'], 
                   place_id=row['place_id'],
@@ -136,6 +141,7 @@ def singleEvent(id):
             return jsonify({'id': int(event['id']),
                             'title': event['title'],
                             'host': event['host'],
+                            "clerk_id": event['clerk_id'],
                             'date': event['date'],
                             'venue': event['venue'],
                             'place_id': event['place_id'],

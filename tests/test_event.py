@@ -33,8 +33,10 @@ def test_can_create_event():
   "category": "Celebration",
   "date": "2024-12-12",
   "description": "Test",
-  "guests":"Test guest",
-  "host": "Test host ",
+  "guests":"testGuest1, TestGuest2",
+  "clerk_id": 1,
+  "place_id": "adadaand64t3fs33",
+  "host": "Isaac Gbolahan Makinde",
   "pricing": 10.0,
   "title": unique_title, ##  have to constantly change this
   "venue": "Test Venue"
@@ -81,6 +83,8 @@ def test_given_valid_data_can_update_event():
     assert updated_data['venue'] == original_payload['venue']
     assert updated_data['category'] == original_payload['category']
     assert updated_data['guests'] == original_payload['guests']
+    assert updated_data['clerk_id'] == original_payload['clerk_id']
+    assert updated_data['place_id'] == original_payload['place_id']
     assert updated_data['id'] == event_id
 
 def test_update_with_invalid_data():
@@ -111,10 +115,12 @@ def new_event_payload():
     unique_title = f"Test Title-{uuid.uuid4()}"
     return {
   "category": "Celebration",
+  "clerk_id": 1,
   "date": "2024-12-12",
   "description": "Test for creating new events",
-  "guests":"Test guest",
+  "guests":"testGuest1, TestGuest2",
   "host": "Test host ",
+  "place_id": "adadaand64t3fs33",
   "pricing": 10.0,
   "title": unique_title,
   "venue": "Test Venue"
@@ -126,10 +132,12 @@ def create_update_test_event_valid():
     unique_title = f"Test Title-{uuid.uuid4()}"
     payload = {
         "category": "Travel",
+        "clerk_id": 1,
         "date": "2024-12-25",
         "description": "Test for updating events",
-        "guests":"Test guest",
-        "host": "Test host ",
+        "guests":"testGuest1, Test_guest2",
+        "host": "Test host",
+        "place_id": "adadaand64t3fs33",
         "pricing": 10.0,
         "title": unique_title,
         "venue": "Test Venue"
@@ -144,10 +152,12 @@ def create_update_test_event_invalid():
     unique_title = f"Test Title-{uuid.uuid4()}"
     payload = {
         "category": "Travel",
+        "clerk_id": 1,
         "date": "2024-12-25",
         "description": "Test for updating events given invalid data",
-        "guests":"Test guest",
+        "guests":"testGuest1, Test_guest2",
         "host": "Test host ",
+        "place_id": "adadaand64t3fs33",
         "pricing": 10.0,
         "title": unique_title,
         "venue": "Test Venue"
