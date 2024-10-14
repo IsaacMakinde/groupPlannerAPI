@@ -1,1 +1,1 @@
-web: hypercorn "app:create_app()"
+hypercorn "app:create_app()"
