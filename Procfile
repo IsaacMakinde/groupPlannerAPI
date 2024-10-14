@@ -1,1 +1,1 @@
-web: hypercorn "app:create_app()"
+web: hypercorn "app:create_app()" --workers 3 --bind 0.0.0.0:8000
