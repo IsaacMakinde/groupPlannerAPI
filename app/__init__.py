@@ -15,11 +15,11 @@ def create_app():
     app = cors(app)
     
     # Firebase setup
-    FIREBASE_CREDS = os.getenv("FIREBASE_CREDENTIALS")
-    BUCKET_NAME = os.getenv("FIREBASE_BUCKET")
+    firebase_creds = os.getenv('FIREBASE_CREDENTIALS')
+    BUCKET_NAME = os.getenv('FIREBASE_BUCKET')
     
-    if FIREBASE_CREDS and BUCKET_NAME:
-        cred_dict = json.loads(FIREBASE_CREDS)
+    if firebase_creds and BUCKET_NAME:
+        cred_dict = json.loads(firebase_creds)
         cred = credentials.Certificate(cred_dict)
         firebase_admin.initialize_app(cred, {
             "storageBucket": BUCKET_NAME,
