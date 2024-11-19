@@ -24,9 +24,9 @@ async def images():
             description: All images deleted successfully
     """
     if request.method == 'GET':
-        return jsonify(await Image.get_all()), 200
+        return jsonify(Image.get_all()), 200
     elif request.method == 'DELETE':
-        return jsonify({'message': await Image.delete_all()}), 200
+        return jsonify({'message': Image.delete_all()}), 200
 
 
 # This route will be used to upload aa image to Firebase Storage and save the URL in the database

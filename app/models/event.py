@@ -1,5 +1,7 @@
 from app.config.db import db_connection
 
+
+ACCEPTED_FIELDS = ['title', 'host', 'clerk_id', 'date', 'venue', 'place_id', 'description', 'category', 'pricing', 'guests']
 class Event:
     @staticmethod
     def get_all():
