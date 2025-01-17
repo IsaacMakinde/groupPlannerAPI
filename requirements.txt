@@ -15,6 +15,7 @@ firebase-admin==6.5.0
 flasgger==0.9.7.1
 Flask==3.0.3
 Flask-Cors==4.0.1
+flask-swagger-ui==4.11.1
 google-api-core==2.21.0
 google-api-python-client==2.149.0
 google-auth==2.35.0
@@ -68,6 +69,7 @@ requests==2.32.3
 rpds-py==0.20.0
 rsa==4.9
 six==1.16.0
+swagger-ui-py==23.9.23
 taskgroup==0.0.0a4
 tomli==2.0.1
 typing_extensions==4.12.2
