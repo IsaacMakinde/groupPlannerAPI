@@ -24,8 +24,27 @@ async def event(event_id):
             data = await request.json  # Await `request.json`
             return jsonify(Event.update(data, event_id)), 200  # Remove `await` if sync
         except Exception as e:
-            print(str(e))
+            print(str(e), "this here", type(e))
             return jsonify({'error': "Something went wrong"}), 400
             
     elif request.method == 'DELETE':
-        return jsonify({'message': await Event.delete_by_id(event_id)}), 200  # Await if async
+        return jsonify(Event.delete_by_id(event_id)), 200  # Await if async
+
+@events_bp.route('/api/events/<string:event_id>/guests', methods=['GET', 'POST', 'DELETE'])
+async def guests(event_id):
+    if request.method == 'GET':
+        return jsonify(Event.get_guests(event_id)), 200  # Await if async
+    elif request.method == 'POST':
+        print("POST attempt")
+        data = await request.json
+        return jsonify(Event.add_guest(data, event_id)), 201
+    elif request.method == 'DELETE':
+        return jsonify({'message': Event.delete_guests(event_id)}), 200
+
+
+@events_bp.route('/api/events/<string:event_id>/guests/<string:guest_id>', methods=['GET', 'DELETE'])
+async def guest(event_id, guest_id):
+    if request.method == 'GET':
+        return jsonify(Event.get_guest(event_id, guest_id)), 200
+    elif request.method == 'DELETE':
+        return jsonify({'message': Event.delete_guest(event_id, guest_id)}), 200

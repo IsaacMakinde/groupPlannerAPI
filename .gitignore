@@ -32,6 +32,8 @@ Thumbs.db
 # Ignore logs and temporary files
 /log
 /tmp
+/csvTables
+*csv
 
 # Ignore sensitive or personal information
 config.ini

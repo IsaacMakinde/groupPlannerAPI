@@ -42,15 +42,16 @@ class Image:
         conn = db_connection()
         if conn:
             with conn.cursor() as cursor:
-                sql = '''INSERT INTO images (event_id, image_url, description) VALUES (%s, %s, %s)'''
-                cursor.execute(sql, (data['event_id'], data['image_url'], "to be added"))
+                sql = '''INSERT INTO images (event_id, image_url, clerk_id,  description) VALUES (%s, %s, %s, %s)'''
+                cursor.execute(sql, (data['event_id'], data['image_url'], data["clerk_id"], data['description']))
                 conn.commit()
 
                 created_image = {
                     "id" : cursor.lastrowid,
                     "event_id" : data['event_id'],
                     "image_url" : data['image_url'],
-                    "description" : "to be added"
+                    "clerk_id" : data['clerk_id'],
+                    "description" : data['description']
                 }
                 return created_image
         return None

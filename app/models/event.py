@@ -1,7 +1,6 @@
 from app.config.db import db_connection
 
-
-ACCEPTED_FIELDS = ['title', 'host', 'clerk_id', 'date', 'venue', 'place_id', 'description', 'category', 'pricing', 'guests']
+ACCEPTED_FIELDS = ['title', 'host', 'clerk_id', 'date', 'venue', 'place_id', 'description', 'category_id', 'pricing']
 class Event:
     @staticmethod
     def get_all():
@@ -26,11 +25,11 @@ class Event:
         conn = db_connection()
         if conn:
             with conn.cursor() as cursor:
-                sql = '''INSERT INTO events (title, host, clerk_id, date, venue, place_id, description, category, pricing, guests) 
-                         VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'''
+                sql = '''INSERT INTO events (title, host, clerk_id, date, venue, place_id, description, category_id, pricing) 
+                         VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)'''
                 cursor.execute(sql, (
                     data['title'], data['host'], data['clerk_id'], data['date'], data['venue'], 
-                    data['place_id'], data['description'], data['category'], data['pricing'], data['guests']
+                    data['place_id'], data['description'], data['category_id'], data['pricing']
                 ))
                 conn.commit()
 
@@ -43,24 +42,23 @@ class Event:
                     "venue" : data['venue'],
                     "place_id" : data['place_id'],
                     "description" : data['description'],
-                    "category" : data['category'],
+                    "category_id" : data['category_id'],
                     "pricing" : data['pricing'],
-                    "guests" : data['guests']
                 }
 
                 return created_event
         return None
-    
+
     @staticmethod
     def update(data, event_id):
         conn = db_connection()
         print(data)
         if conn:
             with conn.cursor() as cursor:
-                sql = '''UPDATE events SET title = %s, host = %s, clerk_id = %s, date = %s, venue = %s, place_id = %s, description = %s, category = %s, pricing = %s, guests = %s WHERE id = %s'''
+                sql = '''UPDATE events SET title = %s, host = %s,  date = %s, venue = %s, place_id = %s, description = %s, category_id = %s, pricing = %s WHERE id = %s'''
                 cursor.execute(sql, (
-                    data['title'], data['host'], data['clerk_id'], data['date'], data['venue'], 
-                    data['place_id'], data['description'], data['category'], data['pricing'], data['guests'], event_id
+                    data['title'], data['host'], data['date'], data['venue'], 
+                    data['place_id'], data['description'], data['category_id'], data['pricing'], event_id
                 ))
                 conn.commit()
                 updated_event = {
@@ -72,9 +70,8 @@ class Event:
                     "venue" : data['venue'],
                     "place_id" : data['place_id'],
                     "description" : data['description'],
-                    "category" : data['category'],
+                    "category_id" : data['category_id'],
                     "pricing" : data['pricing'],
-                    "guests" : data['guests']
                 }
 
                 return updated_event
@@ -96,6 +93,72 @@ class Event:
         if conn:
             with conn.cursor() as cursor:
                 cursor.execute('DELETE FROM events WHERE id = %s', (event_id,))
+                conn.commit()
+                return True
+        return False
+
+    @staticmethod
+    def get_guests(event_id):
+        conn = db_connection()
+        if conn:
+            with conn.cursor() as cursor:
+                cursor.execute('SELECT * FROM guests WHERE event_id = %s', (event_id,))
+                return cursor.fetchall()
+        return None
+
+    @staticmethod
+    def get_guest(event_id, guest_id):
+        conn = db_connection()
+        if conn:
+            with conn.cursor() as cursor:
+                cursor.execute('SELECT * FROM guests WHERE event_id = %s AND id = %s', (event_id, guest_id))
+                return cursor.fetchone()
+        return None
+
+    @staticmethod
+    def add_guest(data, event_id):
+        conn = db_connection()
+        print("attempting to add guest")
+        if conn:
+            with conn.cursor() as cursor:
+                sql = '''INSERT INTO guests (event_id, clerk_id, guest_name, guest_email, guest_image_url, guest_status) VALUES (%s, %s, %s, %s, %s, %s)'''
+                cursor.execute(sql, (event_id, data["clerk_id"], data['guest_name'], data['guest_email'], data['guest_image_url'], data['guest_status']))
+                conn.commit()
+                return {
+                    "event_id" : event_id,
+                    "clerk_id" : data["clerk_id"],
+                    "guest_name" : data['guest_name'],
+                    "guest_email" : data['guest_email'],
+                    "guest_image_url" : data['guest_image_url'],
+                    "guest_status" : data['guest_status']
+                }
+        return None
+
+    @staticmethod
+    def delete_guests(event_id):
+        conn = db_connection()
+        if conn:
+            with conn.cursor() as cursor:
+                cursor.execute('DELETE FROM guests WHERE event_id = %s', (event_id,))
+                conn.commit()
+                return {"message": "Guests deleted"}
+        return False
+
+    @staticmethod
+    def get_guest(event_id, guest_id):
+        conn = db_connection()
+        if conn:
+            with conn.cursor() as cursor:
+                cursor.execute('SELECT * FROM guests WHERE event_id = %s AND id = %s', (event_id, guest_id))
+                return cursor.fetchone()
+        return None
+
+    @staticmethod
+    def delete_guest(event_id, guest_id):
+        conn = db_connection()
+        if conn:
+            with conn.cursor() as cursor:
+                cursor.execute('DELETE FROM guests WHERE event_id = %s AND id = %s', (event_id, guest_id))
                 conn.commit()
                 return True
         return False

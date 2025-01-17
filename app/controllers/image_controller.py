@@ -60,6 +60,8 @@ async def upload_file():
     # Await to get the file and event_id from the request in Quart
     file = (await request.files).get('file')
     event_id = (await request.form).get('event_id')
+    clerk_id = (await request.form).get('clerk_id')
+    description = (await request.form).get('description')
 
     if file:        
         # Define the Firebase Storage bucket
@@ -79,7 +81,10 @@ async def upload_file():
 
         data = {
             "event_id": event_id,
-            "image_url": firebase_url
+            "image_url": firebase_url,
+            "clerk_id": clerk_id,
+            "description": description
+
         }
         print("data", data)
         
